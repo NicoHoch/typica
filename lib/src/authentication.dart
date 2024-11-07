@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'widgets.dart';
+import '../app_state.dart';
 
 class AuthFunc extends StatelessWidget {
   const AuthFunc({
@@ -19,28 +20,43 @@ class AuthFunc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 24, bottom: 8),
-          child: StyledButton(
-              onPressed: () {
-                !loggedIn ? context.push('/sign-in') : signOut();
-              },
-              child: !loggedIn ? const Text('RSVP') : const Text('Logout')),
-        ),
-        Visibility(
-          visible: loggedIn,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 24, bottom: 8),
-            child: StyledButton(
-                onPressed: () {
-                  context.push('/profile');
-                },
-                child: const Text('Profile')),
-          ),
-        )
-      ],
-    );
+    return loggedIn
+        ? PopupMenuButton<String>(
+            onSelected: (value) {
+              if (value == 'profile') {
+                // Navigate to profile page with go_router
+                context.push('/profile');
+              } else if (value == 'logout') {
+                // Sign out the user
+                signOut();
+              }
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'profile',
+                child: ListTile(
+                  leading: Icon(Icons.account_circle),
+                  title: Text('Profile'),
+                ),
+              ),
+              const PopupMenuItem<String>(
+                value: 'logout',
+                child: ListTile(
+                  leading: Icon(Icons.exit_to_app),
+                  title: Text('Logout'),
+                ),
+              ),
+            ],
+            icon: const Icon(Icons.account_circle), // Profile icon
+            tooltip: 'Profile and Logout',
+          )
+        : IconButton(
+            icon: const Icon(Icons.login),
+            onPressed: () {
+              // Navigate to sign-in page
+              context.push('/sign-in');
+            },
+            tooltip: 'Login',
+          );
   }
 }
