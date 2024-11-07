@@ -28,6 +28,7 @@ final _router = GoRouter(
   routes: [
     ShellRoute(
       builder: (context, state, child) {
+        // Wrap MainScaffold around each child route
         return MainScaffold(body: child);
       },
       routes: [
@@ -36,25 +37,23 @@ final _router = GoRouter(
           pageBuilder: (context, state) =>
               const NoTransitionPage(child: HomePage()),
           routes: [
-            // Customer Page
             GoRoute(
               path: 'customer',
-              pageBuilder: (context, state) =>
-                  const NoTransitionPage(child: ManageCustomerPage()),
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: ManageCustomerPage(),
+              ),
             ),
-            // Product Page
             GoRoute(
               path: 'product',
-              pageBuilder: (context, state) =>
-                  const NoTransitionPage(child: ManageProductPage()),
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: ManageProductPage(),
+              ),
             ),
-            // Sign-in Page
             GoRoute(
               path: 'sign-in',
               pageBuilder: (context, state) => NoTransitionPage(
                 child: SignInScreen(
                   actions: [
-                    // Actions for sign-in screen
                     ForgotPasswordAction(((context, email) {
                       final uri = Uri(
                         path: '/sign-in/forgot-password',
@@ -88,8 +87,21 @@ final _router = GoRouter(
                   ],
                 ),
               ),
+              routes: [
+                GoRoute(
+                  path: 'forgot-password',
+                  pageBuilder: (context, state) {
+                    final arguments = state.uri.queryParameters;
+                    return NoTransitionPage(
+                      child: ForgotPasswordScreen(
+                        email: arguments['email'],
+                        headerMaxExtent: 200,
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            // Profile Page
             GoRoute(
               path: 'profile',
               pageBuilder: (context, state) => NoTransitionPage(
@@ -106,21 +118,8 @@ final _router = GoRouter(
           ],
         ),
       ],
-    ),
+    )
   ],
-  // Global redirect for authentication check
-  redirect: (state) {
-    final isLoggedIn = context.read<ApplicationState>().loggedIn;
-
-    // Check if the user is trying to access restricted routes and is not logged in
-    final isRestrictedRoute =
-        state.location == '/customer' || state.location == '/product';
-    if (!isLoggedIn && isRestrictedRoute) {
-      // Redirect to home or sign-in page if not logged in
-      return '/sign-in'; // Or '/' for home if you'd like
-    }
-    return null; // Allow navigation if the user is logged in or route is not restricted
-  },
 );
 
 // end of GoRouter configuration
