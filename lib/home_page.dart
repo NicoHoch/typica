@@ -4,7 +4,6 @@ import 'package:typica/dashboard_page.dart';
 import 'package:typica/welcome_page.dart';
 
 import 'app_state.dart';
-import 'src/widgets.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
