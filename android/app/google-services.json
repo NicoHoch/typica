@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "568271186875",
+    "project_id": "typica-cc820",
+    "storage_bucket": "typica-cc820.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568271186875:android:bffce593a973b40920f29e",
+        "android_client_info": {
+          "package_name": "com.typica.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgoYcItaZ8itfDCbbGt_wUur9EOXQzASY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
