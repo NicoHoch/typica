@@ -5,10 +5,7 @@ class ManageCustomerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kunden'),
-      ),
+    return const Scaffold(
       body: Center(
         child: Text('Customer data will be displayed here.'),
       ),

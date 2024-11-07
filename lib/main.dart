@@ -27,97 +27,101 @@ void main() {
 final _router = GoRouter(
   routes: [
     ShellRoute(
-        builder: (context, state, child) {
-          // Wrap MainScaffold around each child route
-          return MainScaffold(body: child);
-        },
-        routes: [
-          GoRoute(
-            path: '/',
-            pageBuilder: (context, state) =>
-                const NoTransitionPage(child: HomePage()),
-            routes: [
-              GoRoute(
-                path: 'customer',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ManageCustomerPage(),
+      builder: (context, state, child) {
+        // Wrap MainScaffold around each child route
+        return MainScaffold(body: child);
+      },
+      routes: [
+        GoRoute(
+          path: '/',
+          pageBuilder: (context, state) =>
+              const NoTransitionPage(child: HomePage()),
+          routes: [
+            GoRoute(
+              path: 'customer',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: ManageCustomerPage(),
+              ),
+            ),
+            GoRoute(
+              path: 'product',
+              pageBuilder: (context, state) => const NoTransitionPage(
+                child: ManageProductPage(),
+              ),
+            ),
+            GoRoute(
+              path: 'sign-in',
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: SignInScreen(
+                  actions: [
+                    ForgotPasswordAction(((context, email) {
+                      final uri = Uri(
+                        path: '/sign-in/forgot-password',
+                        queryParameters: <String, String?>{
+                          'email': email,
+                        },
+                      );
+                      context.go(uri.toString());
+                    })),
+                    AuthStateChangeAction(((context, state) {
+                      final user = switch (state) {
+                        SignedIn state => state.user,
+                        UserCreated state => state.credential.user,
+                        _ => null
+                      };
+                      if (user == null) {
+                        return;
+                      }
+                      if (state is UserCreated) {
+                        user.updateDisplayName(user.email!.split('@')[0]);
+                      }
+                      if (!user.emailVerified) {
+                        user.sendEmailVerification();
+                        const snackBar = SnackBar(
+                            content: Text(
+                                'Please check your email to verify your email address'));
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                      context.go('/');
+                    })),
+                  ],
                 ),
               ),
-              GoRoute(
-                path: 'product',
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ManageProductPage(),
-                ),
-              ),
-              GoRoute(
-                path: 'sign-in',
-                builder: (context, state) {
-                  return SignInScreen(
-                    actions: [
-                      ForgotPasswordAction(((context, email) {
-                        final uri = Uri(
-                          path: '/sign-in/forgot-password',
-                          queryParameters: <String, String?>{
-                            'email': email,
-                          },
-                        );
-                        context.push(uri.toString());
-                      })),
-                      AuthStateChangeAction(((context, state) {
-                        final user = switch (state) {
-                          SignedIn state => state.user,
-                          UserCreated state => state.credential.user,
-                          _ => null
-                        };
-                        if (user == null) {
-                          return;
-                        }
-                        if (state is UserCreated) {
-                          user.updateDisplayName(user.email!.split('@')[0]);
-                        }
-                        if (!user.emailVerified) {
-                          user.sendEmailVerification();
-                          const snackBar = SnackBar(
-                              content: Text(
-                                  'Please check your email to verify your email address'));
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                        context.pushReplacement('/');
-                      })),
-                    ],
-                  );
-                },
-                routes: [
-                  GoRoute(
-                    path: 'forgot-password',
-                    builder: (context, state) {
-                      final arguments = state.uri.queryParameters;
-                      return ForgotPasswordScreen(
+              routes: [
+                GoRoute(
+                  path: 'forgot-password',
+                  pageBuilder: (context, state) {
+                    final arguments = state.uri.queryParameters;
+                    return NoTransitionPage(
+                      child: ForgotPasswordScreen(
                         email: arguments['email'],
                         headerMaxExtent: 200,
-                      );
-                    },
-                  ),
-                ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            GoRoute(
+              path: 'profile',
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: ProfileScreen(
+                  providers: const [],
+                  actions: [
+                    SignedOutAction((context) {
+                      context.go('/');
+                    }),
+                  ],
+                ),
               ),
-              GoRoute(
-                path: 'profile',
-                builder: (context, state) {
-                  return ProfileScreen(
-                    providers: const [],
-                    actions: [
-                      SignedOutAction((context) {
-                        context.pushReplacement('/');
-                      }),
-                    ],
-                  );
-                },
-              ),
-            ],
-          ),
-        ])
+            ),
+          ],
+        ),
+      ],
+    )
   ],
 );
+
 // end of GoRouter configuration
 
 class App extends StatelessWidget {

@@ -5,10 +5,7 @@ class ManageProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Produkte'),
-      ),
+    return const Scaffold(
       body: Center(
         child: Text('Products data will be displayed here.'),
       ),
