@@ -48,6 +48,7 @@ final _router = GoRouter(
                         ManageCustomerPage(
                           saveCustomer: (message) =>
                               appState.saveCustomerToFirebase(message),
+                          customers: appState.customerEntries,
                         ),
                       ],
                     ],
