@@ -39,8 +39,20 @@ final _router = GoRouter(
           routes: [
             GoRoute(
               path: 'customer',
-              pageBuilder: (context, state) => const NoTransitionPage(
-                child: ManageCustomerPage(),
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: Consumer<ApplicationState>(
+                  builder: (context, appState, _) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (appState.loggedIn) ...[
+                        ManageCustomerPage(
+                          saveCustomer: (message) =>
+                              appState.saveCustomerToFirebase(message),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
               ),
             ),
             GoRoute(
