@@ -38,15 +38,9 @@ class ApplicationState extends ChangeNotifier {
             .orderBy('timestamp', descending: true)
             .snapshots()
             .listen((snapshot) {
-          _customerEntries = [];
-          for (final document in snapshot.docs) {
-            _customerEntries.add(
-              CustomerEntry(
-                customerName: document.data()['customerName'] as String,
-                createdFrom: document.data()['createdFrom'] as String,
-              ),
-            );
-          }
+          _customerEntries = snapshot.docs
+              .map((doc) => CustomerEntry.fromFirestore(doc))
+              .toList();
           notifyListeners();
         });
       } else {
@@ -58,18 +52,20 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
-  Future<DocumentReference> saveCustomerToFirebase(String message) {
+  Future<DocumentReference> saveCustomerToFirebase(String customerName) {
     if (!_loggedIn) {
       throw Exception('Must be logged in');
     }
 
+    final newCustomer = CustomerEntry(
+      customerName: customerName,
+      createdFrom: FirebaseAuth.instance.currentUser!.displayName ?? '',
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+      userId: FirebaseAuth.instance.currentUser!.uid,
+    );
+
     return FirebaseFirestore.instance
         .collection('customers')
-        .add(<String, dynamic>{
-      'customerName': message,
-      'timestamp': DateTime.now().millisecondsSinceEpoch,
-      'createdFrom': FirebaseAuth.instance.currentUser!.displayName,
-      'userId': FirebaseAuth.instance.currentUser!.uid,
-    });
+        .add(newCustomer.toFirestore());
   }
 }
