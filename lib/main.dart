@@ -8,8 +8,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:typica/main_scaffold.dart';
-import 'package:typica/manage_customer.dart';
-import 'package:typica/manage_product.dart';
+import 'package:typica/manage_customer_page.dart';
+import 'package:typica/manage_product_page.dart';
+import 'package:typica/utils/enums.dart';
 
 import 'app_state.dart';
 import 'home_page.dart';
@@ -47,7 +48,8 @@ final _router = GoRouter(
                       if (appState.loggedIn) ...[
                         ManageCustomerPage(
                           saveCustomer: (message) =>
-                              appState.saveCustomerToFirebase(message),
+                              appState.saveOrganizationToFirebase(
+                                  message, OrganizationType.customer),
                           customers: appState.customerEntries,
                         ),
                       ],

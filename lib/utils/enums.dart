@@ -1,0 +1,4 @@
+enum OrganizationType {
+  customer,
+  vendor,
+}

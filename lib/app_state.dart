@@ -6,9 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:typica/utils/enums.dart';
 
 import 'firebase_options.dart';
-import 'customer_entry.dart';
+import 'organization.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -21,8 +22,8 @@ class ApplicationState extends ChangeNotifier {
   bool get loggedIn => _loggedIn;
 
   StreamSubscription<QuerySnapshot>? _customerSubscription;
-  List<CustomerEntry> _customerEntries = [];
-  List<CustomerEntry> get customerEntries => _customerEntries;
+  List<Organization> _customerEntries = [];
+  List<Organization> get customerEntries => _customerEntries;
 
   Future<void> init() async {
     await Firebase.initializeApp(
@@ -36,12 +37,14 @@ class ApplicationState extends ChangeNotifier {
       if (user != null) {
         _loggedIn = true;
         _customerSubscription = FirebaseFirestore.instance
-            .collection('customers')
+            .collection('Organization')
+            .where('organizationType',
+                isEqualTo: OrganizationType.customer.name)
             .orderBy('timestamp', descending: true)
             .snapshots()
             .listen((snapshot) {
           _customerEntries = snapshot.docs
-              .map((doc) => CustomerEntry.fromFirestore(doc))
+              .map((doc) => Organization.fromFirestore(doc))
               .toList();
           notifyListeners();
         });
@@ -54,21 +57,22 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
-  Future<DocumentReference> saveCustomerToFirebase(String customerName) {
+  Future<DocumentReference> saveOrganizationToFirebase(
+      String customerName, OrganizationType organizationType) {
     if (!_loggedIn) {
       throw Exception('Must be logged in');
     }
 
-    final newCustomer = CustomerEntry(
-      customerName: customerName,
-      customerGUID: const Uuid().v4(),
-      createdFrom: FirebaseAuth.instance.currentUser!.displayName ?? '',
+    final newCustomer = Organization(
+      organizationName: customerName,
+      organizationGUID: const Uuid().v4(),
+      organizationType: organizationType,
+      createdFrom: FirebaseAuth.instance.currentUser!.uid,
       timestamp: DateTime.now().millisecondsSinceEpoch,
-      userId: FirebaseAuth.instance.currentUser!.uid,
     );
 
     return FirebaseFirestore.instance
-        .collection('customers')
+        .collection('Organization')
         .add(newCustomer.toFirestore());
   }
 }

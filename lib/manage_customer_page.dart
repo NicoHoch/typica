@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:typica/src/widgets.dart';
-import 'customer_entry.dart';
+import 'organization.dart';
 
 class ManageCustomerPage extends StatefulWidget {
   const ManageCustomerPage(
       {required this.saveCustomer, super.key, required this.customers});
 
   final FutureOr<void> Function(String message) saveCustomer;
-  final List<CustomerEntry> customers;
+  final List<Organization> customers;
 
   @override
   State<ManageCustomerPage> createState() => _ManageCustomerPageState();
@@ -67,7 +67,7 @@ class _ManageCustomerPageState extends State<ManageCustomerPage> {
         const SizedBox(height: 8),
         for (var customer in widget.customers)
           Paragraph(
-              '${customer.customerName}: ${customer.createdFrom} - ${customer.customerGUID}'),
+              '${customer.organizationName}: ${customer.createdFrom} - ${customer.organizationGUID}'),
         const SizedBox(height: 8),
       ],
     );
