@@ -66,7 +66,8 @@ class _ManageCustomerPageState extends State<ManageCustomerPage> {
         ),
         const SizedBox(height: 8),
         for (var customer in widget.customers)
-          Paragraph('${customer.customerName}: ${customer.createdFrom}'),
+          Paragraph(
+              '${customer.customerName}: ${customer.createdFrom} - ${customer.customerGUID}'),
         const SizedBox(height: 8),
       ],
     );

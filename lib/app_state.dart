@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 import 'customer_entry.dart';
 
+import 'package:uuid/uuid.dart';
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
@@ -59,6 +61,7 @@ class ApplicationState extends ChangeNotifier {
 
     final newCustomer = CustomerEntry(
       customerName: customerName,
+      customerGUID: const Uuid().v4(),
       createdFrom: FirebaseAuth.instance.currentUser!.displayName ?? '',
       timestamp: DateTime.now().millisecondsSinceEpoch,
       userId: FirebaseAuth.instance.currentUser!.uid,
