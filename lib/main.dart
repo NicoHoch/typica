@@ -8,12 +8,12 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:typica/main_scaffold.dart';
-import 'package:typica/manage_customer_page.dart';
-import 'package:typica/manage_product_page.dart';
+import 'package:typica/pages/manage_customer_page.dart';
+import 'package:typica/pages/manage_product_page.dart';
 import 'package:typica/utils/enums.dart';
 
 import 'app_state.dart';
-import 'home_page.dart';
+import 'pages/home_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -145,7 +145,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Firebase Meetup',
+      title: 'Typica',
       theme: ThemeData(
         buttonTheme: Theme.of(context).buttonTheme.copyWith(
               highlightColor: Colors.deepPurple,
