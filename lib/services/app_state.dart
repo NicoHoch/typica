@@ -8,8 +8,8 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:typica/utils/enums.dart';
 
-import 'firebase_options.dart';
-import 'organization.dart';
+import '../firebase_options.dart';
+import '../models/organization.dart';
 
 import 'package:uuid/uuid.dart';
 

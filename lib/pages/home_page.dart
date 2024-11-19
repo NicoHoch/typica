@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:typica/dashboard_page.dart';
-import 'package:typica/welcome_page.dart';
+import 'package:typica/pages/dashboard_page.dart';
+import 'package:typica/pages/welcome_page.dart';
 
-import 'app_state.dart';
+import '../services/app_state.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

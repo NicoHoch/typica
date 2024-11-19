@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:typica/main_scaffold.dart';
+import 'package:typica/widgets/main_scaffold.dart';
 import 'package:typica/pages/manage_customer_page.dart';
 import 'package:typica/pages/manage_product_page.dart';
 import 'package:typica/utils/enums.dart';
 
-import 'app_state.dart';
+import 'services/app_state.dart';
 import 'pages/home_page.dart';
 
 void main() {

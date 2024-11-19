@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:typica/src/widgets.dart';
-import 'organization.dart';
+import 'package:typica/widgets/widgets.dart';
+import '../models/organization.dart';
 
 class ManageCustomerPage extends StatefulWidget {
   const ManageCustomerPage(
